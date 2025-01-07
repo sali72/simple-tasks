@@ -13,3 +13,12 @@ async def create_task_route(task_schema: TaskCreationSchema):
     message = "Task created successfully"
     data = {"id": _id}
     return ResponseSchema(data=data, message=message)
+
+
+@tasks_router.get("/{task_id}", response_model=ResponseSchema)
+async def get_task_route(task_id: int):
+    task = await TasksController.get_task(task_id)
+
+    message = "Task retrieved successfully"
+    data = task.to_dict()
+    return ResponseSchema(data=data, message=message)

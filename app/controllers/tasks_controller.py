@@ -18,3 +18,7 @@ class TasksController:
             description=task_schema.description,
             is_completed=task_schema.is_completed,
         )
+
+    @classmethod
+    async def get_task(cls, task_id: int) -> Task:
+        return await TasksCRUD.get_task(task_id)

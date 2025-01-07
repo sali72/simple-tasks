@@ -21,7 +21,7 @@ class TasksCRUD:
     
     @classmethod
     async def update_task(cls, task_id: int, task: Task) -> Task:
-        db.query(Task).filter(Task.id == task_id).update(task.dict())
+        db.query(Task).filter(Task.id == task_id).update(task.to_dict())
         db.commit()
         return task
     
