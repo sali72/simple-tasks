@@ -32,6 +32,7 @@ async def get_tasks_route():
     data = {"tasks": tasks}
     return ResponseSchema(data=data, message=message)
 
+
 @tasks_router.put("/{task_id}", response_model=ResponseSchema)
 async def update_task_route(task_id: int, task_schema: TaskUpdateSchema):
     task = await TasksController.update_task(task_id, task_schema)
@@ -39,3 +40,11 @@ async def update_task_route(task_id: int, task_schema: TaskUpdateSchema):
     message = "Task updated successfully"
     data = task.to_dict()
     return ResponseSchema(data=data, message=message)
+
+
+@tasks_router.delete("/{task_id}", response_model=ResponseSchema)
+async def delete_task_route(task_id: int):
+    await TasksController.delete_task(task_id)
+
+    message = "Task deleted successfully"
+    return ResponseSchema(message=message)

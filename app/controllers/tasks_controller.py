@@ -37,3 +37,8 @@ class TasksController:
         # Update the task with only the provided fields
         updated_task = await TasksCRUD.update_task(task_id, update_data)
         return updated_task
+    
+    @classmethod
+    async def delete_task(cls, task_id: int) -> None:
+        await TasksCRUD.delete_task(task_id)
+        return None
