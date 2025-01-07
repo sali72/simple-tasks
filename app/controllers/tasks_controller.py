@@ -22,3 +22,8 @@ class TasksController:
     @classmethod
     async def get_task(cls, task_id: int) -> Task:
         return await TasksCRUD.get_task(task_id)
+
+    @classmethod
+    async def get_tasks(cls) -> list[dict]:
+        tasks = await TasksCRUD.get_tasks()
+        return [task.to_dict() for task in tasks]

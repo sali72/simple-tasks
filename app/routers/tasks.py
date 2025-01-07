@@ -22,3 +22,12 @@ async def get_task_route(task_id: int):
     message = "Task retrieved successfully"
     data = task.to_dict()
     return ResponseSchema(data=data, message=message)
+
+
+@tasks_router.get("", response_model=ResponseSchema)
+async def get_tasks_route():
+    tasks = await TasksController.get_tasks()
+
+    message = "Tasks retrieved successfully"
+    data = {"tasks": tasks}
+    return ResponseSchema(data=data, message=message)
