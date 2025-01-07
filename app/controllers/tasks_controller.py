@@ -1,6 +1,6 @@
 from app.crud import TasksCRUD
 from app.models import Task
-from app.schemas import TaskCreationSchema
+from app.schemas import TaskCreationSchema, TaskUpdateSchema
 
 
 class TasksController:
@@ -27,3 +27,13 @@ class TasksController:
     async def get_tasks(cls) -> list[dict]:
         tasks = await TasksCRUD.get_tasks()
         return [task.to_dict() for task in tasks]
+
+    @classmethod
+    async def update_task(cls, task_id: int, task_schema: TaskUpdateSchema) -> Task:
+        update_data = {
+            key: value for key, value in task_schema.dict(exclude_unset=True).items()
+        }
+
+        # Update the task with only the provided fields
+        updated_task = await TasksCRUD.update_task(task_id, update_data)
+        return updated_task

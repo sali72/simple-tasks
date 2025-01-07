@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, Extra, Field
 
@@ -19,6 +20,12 @@ class TaskCreationSchema(BaseModelConfigured):
     title: str = Field(..., title="The task title")
     is_completed: bool = Field(False, title="The task completion status")
     description: str = Field(None, title="The task description")
+
+
+class TaskUpdateSchema(BaseModelConfigured):
+    title: Optional[str] = Field(None, title="The task title")
+    is_completed: Optional[bool] = Field(None, title="The task completion status")
+    description: Optional[str] = Field(None, title="The task description")
 
 
 class ResponseSchema(BaseModelConfigured):

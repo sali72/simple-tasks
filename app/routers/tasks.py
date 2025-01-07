@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
 from app.controllers.tasks_controller import TasksController
-from app.schemas import ResponseSchema, TaskCreationSchema
+from app.schemas import ResponseSchema, TaskCreationSchema, TaskUpdateSchema
 
-tasks_router = APIRouter(prefix="/task", tags=["Tasks"])
+tasks_router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 
 @tasks_router.post("", response_model=ResponseSchema)
@@ -30,4 +30,12 @@ async def get_tasks_route():
 
     message = "Tasks retrieved successfully"
     data = {"tasks": tasks}
+    return ResponseSchema(data=data, message=message)
+
+@tasks_router.put("/{task_id}", response_model=ResponseSchema)
+async def update_task_route(task_id: int, task_schema: TaskUpdateSchema):
+    task = await TasksController.update_task(task_id, task_schema)
+
+    message = "Task updated successfully"
+    data = task.to_dict()
     return ResponseSchema(data=data, message=message)
