@@ -1,0 +1,6 @@
+fastapi
+pydantic
+python-dotenv
+# python-multipart
+SQLAlchemy
+psycopg2
