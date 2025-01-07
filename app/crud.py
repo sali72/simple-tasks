@@ -1,4 +1,5 @@
 from sqlalchemy import update
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.future import select
 
 from app.database import db_session as db
@@ -16,7 +17,10 @@ class TasksCRUD:
 
     @classmethod
     async def get_task(cls, task_id: int) -> Task:
-        return db.query(Task).filter(Task.id == task_id).first()
+        task = db.query(Task).filter(Task.id == task_id).first()
+        if task is None:
+            raise NoResultFound(f"Task with id {task_id} does not exist.")
+        return task
 
     @classmethod
     async def get_tasks(cls) -> list[Task]:
@@ -24,7 +28,6 @@ class TasksCRUD:
 
     @classmethod
     async def update_task(cls, task_id: int, update_data: dict) -> Task:
-        # Perform the update operation
         stmt = (
             update(Task)
             .where(Task.id == task_id)
@@ -34,13 +37,14 @@ class TasksCRUD:
         db.execute(stmt)
         db.commit()
 
-        # Fetch the updated task
         stmt = select(Task).where(Task.id == task_id)
         result = db.execute(stmt)
         return result.scalar_one_or_none()
 
     @classmethod
     async def delete_task(cls, task_id: int) -> None:
-        db.query(Task).filter(Task.id == task_id).delete()
+        result = db.query(Task).filter(Task.id == task_id).delete()
         db.commit()
-        return None
+
+        if result == 0:
+            raise NoResultFound(f"Task with id {task_id} does not exist.")
