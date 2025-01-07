@@ -1,13 +1,9 @@
-import os
-
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-load_dotenv()
-POSTGRES_URL = os.getenv("POSTGRES_URL")
+from app.config import POSTGRES_URL, APP_DEBUG
 
-engine = create_engine(POSTGRES_URL, echo=True)
+engine = create_engine(POSTGRES_URL, echo=APP_DEBUG)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 db_session = SessionLocal()
